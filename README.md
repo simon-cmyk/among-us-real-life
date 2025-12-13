@@ -49,44 +49,57 @@ Pressing the start button will reset task progress, assign new tasks, and assign
 
 Players may access the the game at [http://localhost:4046](http://localhost:4046). On other computers (or phones), you will need to enter the computer's local IP or use a tunneling service like [ngrok](https://ngrok.com). Alternatively, you could deploy this yourself.
 
-### Deploy to GitHub Pages (frontend) + hosted backend
+### Deploy to GitHub Pages (frontend) + Railway (backend)
 
-This project uses Socket.IO and requires a backend to coordinate state. GitHub Pages can host the static frontend, but you must run the Node.js backend elsewhere (Render, Fly.io, Railway, Heroku, your own server, etc.).
+This project uses Socket.IO and requires a backend to coordinate state. GitHub Pages hosts the static frontend, Railway hosts the Node.js backend (free tier).
 
-Steps:
+**Quick Start:**
 
-1. **Deploy the backend to Render (free tier):**
-   - Push your code to GitHub (includes `render.yaml`)
-   - Go to [https://render.com](https://render.com) and sign in with GitHub
-   - Click "New +" → "Web Service"
-   - Connect your GitHub repository
-   - Render will auto-detect `render.yaml` and configure everything
-   - Click "Create Web Service"
-   - Wait for deployment to finish (~2 minutes)
-   - Copy your service URL: `https://among-us-backend-XXXX.onrender.com`
+1. **Deploy Backend to Railway:**
+   - Go to [https://railway.app](https://railway.app)
+   - Click "Start a New Project" → "Deploy from GitHub repo"
+   - Sign in with GitHub and authorize Railway
+   - Select your `among-us-real-life` repository
+   - Railway will auto-detect Node.js and deploy
+   - Click on your deployment → Settings → Generate Domain
+   - Copy your domain (e.g., `among-us-backend-production-xxxx.up.railway.app`)
 
-2. **Configure the frontend to point to the backend:**
-   - Edit `src/public/config.js` and replace `YOUR-BACKEND-URL.onrender.com` with your actual Render URL:
+2. **Update Frontend Config:**
+   - Edit `src/public/config.js` line 8
+   - Replace `YOUR-BACKEND-URL.onrender.com` with your Railway URL:
      ```js
-     window.BACKEND_URL = "https://among-us-backend-XXXX.onrender.com";
+     window.BACKEND_URL = "https://among-us-backend-production-xxxx.up.railway.app";
      ```
-   - Commit and push this change
+   - Commit and push:
+     ```bash
+     git add src/public/config.js
+     git commit -m "Add Railway backend URL"
+     git push
+     ```
 
 3. **Enable GitHub Pages:**
-   - In your repository settings on GitHub → Pages:
-     - Source: `Deploy from a branch`
-     - Branch: `master` (or `main`), folder: `/ (root)`
-   - After a minute, your site will be available at `https://simon-cmyk.github.io/among-us-real-life/`
+   - Go to your repo on GitHub → Settings → Pages
+   - Source: "Deploy from a branch"
+   - Branch: `master`, Folder: `/ (root)`
+   - Save and wait ~1 minute
 
-4. **Visit the game:**
+4. **Play the Game:**
    - Player UI: `https://simon-cmyk.github.io/among-us-real-life/src/views/index.html`
    - Admin UI: `https://simon-cmyk.github.io/among-us-real-life/src/views/admin.html`
+   - Share the player link with friends!
 
-Notes:
-- Static assets are served from `/src/public/...` 
-- The root `index.html` redirects to `src/views/index.html`
-- Render's free tier may sleep after 15 minutes of inactivity (first request takes ~30s to wake up)
-- When running locally, the config auto-detects and uses `http://localhost:4046`## Known issues
+**Local Development:**
+```bash
+# Terminal 1: Start backend
+npm start
+
+# Terminal 2: Serve frontend
+python3 -m http.server 8080
+
+# Visit: http://localhost:8080/src/views/index.html
+```
+
+The config auto-detects localhost vs production!## Known issues
 
 -   Sometimes, duplicate tasks are assigned (temporary workaround is to start another game)
 -   On some Android phones, hiding the browser will reset its state, therefore losing your tasks

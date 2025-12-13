@@ -1,4 +1,4 @@
-const PORT = 4046;
+const PORT = process.env.PORT || 4046;
 
 const express = require('express');
 const http = require('http');
