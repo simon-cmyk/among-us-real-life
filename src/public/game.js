@@ -1,78 +1,117 @@
-const socket = io(window.BACKEND_URL || undefined, {
-	query: {
-		role: 'PLAYER'
-	}
+console.log('game.js loaded, BACKEND_URL is:', window.BACKEND_URL);
+const socket = io(window.BACKEND_URL || window.location.origin, {
+    query: {
+        role: 'PLAYER'
+    }
+});
+console.log('Socket.IO connecting to:', window.BACKEND_URL || window.location.origin);
+
+// Connection diagnostics
+socket.on('connect', () => {
+    console.log('Socket connected', socket.id);
+    const errorDiv = document.getElementById('connection-error');
+    if (errorDiv) errorDiv.style.display = 'none';
+});
+socket.on('connect_error', (err) => {
+    console.error('Connect error:', err);
+    const errorDiv = document.getElementById('connection-error');
+    if (errorDiv) errorDiv.style.display = 'block';
+});
+socket.on('error', (err) => {
+    console.error('Socket error:', err);
 });
 
-const emergencyMeeting$ = document.querySelector('#emergency-meeting');
+const emergencyButton$ = document.querySelector('#emergency-button');
 const enableSound$ = document.querySelector('#enable-sound');
-const progress$ = document.querySelector('#progress');
-const progressBar$ = document.querySelector('.progress-bar');
-const report$ = document.querySelector('#report');
-const tasks$ = document.querySelector('#tasks');
+const progressText$ = document.querySelector('#progress-text');
+const reportButton$ = document.querySelector('#report-button');
+const tasksList$ = document.querySelector('#tasks-list');
 
-report$.addEventListener('click', () => {
-	socket.emit('report');
-});
+let soundEnabled = false;
 
-emergencyMeeting$.addEventListener('click', () => {
-	socket.emit('emergency-meeting');
-	emergencyMeeting$.style.display = 'none';
-});
+if (reportButton$) {
+    reportButton$.addEventListener('click', () => {
+        socket.emit('report');
+    });
+}
+
+if (emergencyButton$) {
+    emergencyButton$.addEventListener('click', () => {
+        socket.emit('emergency-meeting');
+    });
+}
+
+if (enableSound$) {
+    enableSound$.addEventListener('click', () => {
+        console.log('Sound enabled');
+        soundEnabled = true;
+        enableSound$.textContent = 'Sound Enabled';
+        enableSound$.disabled = true;
+    });
+}
 
 socket.on('tasks', tasks => {
-	// Remove existing tasks
-	while (tasks$.firstChild) {
-		tasks$.removeChild(tasks$.firstChild);
-	}
+    console.log('Received tasks:', tasks);
+    if (!tasksList$) return;
+    
+    // Remove existing tasks
+    while (tasksList$.firstChild) {
+        tasksList$.removeChild(tasksList$.firstChild);
+    }
 
-	for (const [taskId, task] of Object.entries(tasks)) {
-		const task$ = document.createElement('li');
-		const label$ = document.createElement('label');
+    for (const [taskId, task] of Object.entries(tasks)) {
+        const taskItem$ = document.createElement('li');
+        taskItem$.className = 'list-group-item';
+        
+        const label$ = document.createElement('label');
+        label$.style.cursor = 'pointer';
+        label$.style.display = 'flex';
+        label$.style.alignItems = 'center';
 
-		const checkbox$ = document.createElement('input');
-		checkbox$.type = 'checkbox';
-		// checkbox.name = "name";
-		// checkbox.value = "value";
-		// checkbox.id = "id";
-		checkbox$.onchange = event => {
-			console.log('checkbox change', event.target.checked);
-			if (event.target.checked) {
-				socket.emit('task-complete', taskId);
-			} else {
-				socket.emit('task-incomplete', taskId);
-			}
-		};
+        const checkbox$ = document.createElement('input');
+        checkbox$.type = 'checkbox';
+        checkbox$.style.marginRight = '10px';
+        checkbox$.onchange = event => {
+            console.log('Task checkbox changed:', taskId, event.target.checked);
+            if (event.target.checked) {
+                socket.emit('task-complete', taskId);
+            } else {
+                socket.emit('task-incomplete', taskId);
+            }
+        };
 
-		label$.appendChild(checkbox$);
-		label$.appendChild(document.createTextNode(task));
+        label$.appendChild(checkbox$);
+        label$.appendChild(document.createTextNode(task));
 
-		task$.appendChild(label$);
-		tasks$.appendChild(task$);
-	}
+        taskItem$.appendChild(label$);
+        tasksList$.appendChild(taskItem$);
+    }
 });
 
 socket.on('role', role => {
-	hideRole();
-	const role$ = document.createElement('a');
-	role$.classList.add('role');
-	role$.appendChild(
-		document.createTextNode(`You are a(n) ${role}. Click to dismiss.`)
-	);
-	role$.onclick = () => hideRole();
+    console.log('Received role:', role);
+    hideRole();
+    const role$ = document.createElement('div');
+    role$.classList.add('role');
+    role$.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid black; z-index: 10000; cursor: pointer;';
+    role$.appendChild(
+        document.createTextNode(`You are a(n) ${role}. Click to dismiss.`)
+    );
+    role$.onclick = () => hideRole();
 
-	document.body.appendChild(role$);
+    document.body.appendChild(role$);
 });
 
 function hideRole() {
-	document
-		.querySelectorAll('.role')
-		.forEach(element => (element.style.display = 'none'));
+    document
+        .querySelectorAll('.role')
+        .forEach(element => element.remove());
 }
 
 socket.on('progress', progress => {
-	progress$.innerHTML = (progress * 100).toFixed(0);
-	progressBar$.style.width = `${progress * 100}%`;
+    if (progressText$) {
+        progressText$.textContent = `Progress is ${Math.round(progress * 100)}% complete`;
+    }
 });
 
 /**
@@ -80,39 +119,72 @@ socket.on('progress', progress => {
  */
 
 async function wait(milliseconds) {
-	await new Promise(resolve => {
-		setTimeout(() => resolve(), milliseconds);
-	});
+    await new Promise(resolve => {
+        setTimeout(() => resolve(), milliseconds);
+    });
 }
 
-const soundPlayer = new Audio();
 const SOUNDS = {
-	meeting: '/src/public/sounds/meeting.mp3',
-	sabotage: '/src/public/sounds/sabotage.mp3',
-	start: '/src/public/sounds/start.mp3',
-	sussyBoy: '/src/public/sounds/sussy-boy.mp3',
-	voteResult: '/src/public/sounds/vote-result.mp3',
-	youLose: '/src/public/sounds/you-lose.mp3',
-	youWin: '/src/public/sounds/you-win.mp3'
+    meeting: new Audio('/src/public/sounds/meeting.mp3'),
+    sabotage: new Audio('/src/public/sounds/sabotage.mp3'),
+    start: new Audio('/src/public/sounds/start.mp3'),
+    sussyBoy: new Audio('/src/public/sounds/sussy-boy.mp3'),
+    taskComplete: new Audio('/src/public/sounds/task-complete.mp3'),
+    voteResult: new Audio('/src/public/sounds/vote-result.mp3'),
+    youLose: new Audio('/src/public/sounds/you-lose.mp3'),
+    youWin: new Audio('/src/public/sounds/you-win.mp3')
 };
 
 socket.on('play-meeting', async () => {
-	await playSound(SOUNDS.meeting);
-	await wait(2000);
-	await playSound(SOUNDS.sussyBoy);
+    console.log('Playing meeting sound, soundEnabled:', soundEnabled);
+    if (!soundEnabled) {
+        console.log('Sound is disabled - click "Enable Sound" button first');
+        return;
+    }
+    try {
+        await SOUNDS.meeting.play();
+        await wait(2000);
+        await SOUNDS.sussyBoy.play();
+    } catch (err) {
+        console.error('Error playing meeting sound:', err);
+    }
+});
+
+socket.on('play-task-complete', async () => {
+    console.log('Playing task complete sound, soundEnabled:', soundEnabled);
+    if (!soundEnabled) {
+        console.log('Sound is disabled - click "Enable Sound" button first');
+        return;
+    }
+    try {
+        await SOUNDS.taskComplete.play();
+    } catch (err) {
+        console.error('Error playing task complete sound:', err);
+    }
 });
 
 socket.on('play-win', async () => {
-	await playSound(SOUNDS.youWin);
+    console.log('Playing win sound, soundEnabled:', soundEnabled);
+    if (!soundEnabled) {
+        console.log('Sound is disabled - click "Enable Sound" button first');
+        return;
+    }
+    try {
+        await SOUNDS.youWin.play();
+    } catch (err) {
+        console.error('Error playing win sound:', err);
+    }
 });
 
-enableSound$.addEventListener('click', async () => {
-	console.log('enable sound');
-	enableSound$.style.display = 'none';
-	soundPlayer.play();
+socket.on('play-start', async () => {
+    console.log('Playing start sound, soundEnabled:', soundEnabled);
+    if (!soundEnabled) {
+        console.log('Sound is disabled - click "Enable Sound" button first');
+        return;
+    }
+    try {
+        await SOUNDS.start.play();
+    } catch (err) {
+        console.error('Error playing start sound:', err);
+    }
 });
-
-async function playSound(url) {
-	soundPlayer.src = url;
-	await soundPlayer.play();
-}

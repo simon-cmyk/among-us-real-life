@@ -55,29 +55,38 @@ This project uses Socket.IO and requires a backend to coordinate state. GitHub P
 
 Steps:
 
-1. Deploy the backend
-	- Run the server from `src/index.js` on a public URL. For example, using Render:
-	  - Create a new Web Service, build command `npm install`, start command `npm start`.
-	  - Note the service URL, e.g. `https://among-us-backend.onrender.com`.
-2. Configure the frontend to point to the backend
-	- Edit `src/public/config.js` and set `window.BACKEND_URL` to your backend URL, e.g.:
-	  ```js
-	  window.BACKEND_URL = "https://among-us-backend.onrender.com";
-	  ```
-3. Enable GitHub Pages
-	- In your repository settings on GitHub → Pages:
-	  - Source: `Deploy from a branch`
-	  - Branch: `master` (or `main`), folder: `/ (root)`
-	- After a minute, your site will be available at `https://<username>.github.io/<repo>/`.
-4. Visit the game and admin UIs
-	- Player UI: `https://<username>.github.io/<repo>/src/views/index.html`
-	- Admin UI: `https://<username>.github.io/<repo>/src/views/admin.html`
+1. **Deploy the backend to Render (free tier):**
+   - Push your code to GitHub (includes `render.yaml`)
+   - Go to [https://render.com](https://render.com) and sign in with GitHub
+   - Click "New +" → "Web Service"
+   - Connect your GitHub repository
+   - Render will auto-detect `render.yaml` and configure everything
+   - Click "Create Web Service"
+   - Wait for deployment to finish (~2 minutes)
+   - Copy your service URL: `https://among-us-backend-XXXX.onrender.com`
+
+2. **Configure the frontend to point to the backend:**
+   - Edit `src/public/config.js` and replace `YOUR-BACKEND-URL.onrender.com` with your actual Render URL:
+     ```js
+     window.BACKEND_URL = "https://among-us-backend-XXXX.onrender.com";
+     ```
+   - Commit and push this change
+
+3. **Enable GitHub Pages:**
+   - In your repository settings on GitHub → Pages:
+     - Source: `Deploy from a branch`
+     - Branch: `master` (or `main`), folder: `/ (root)`
+   - After a minute, your site will be available at `https://simon-cmyk.github.io/among-us-real-life/`
+
+4. **Visit the game:**
+   - Player UI: `https://simon-cmyk.github.io/among-us-real-life/src/views/index.html`
+   - Admin UI: `https://simon-cmyk.github.io/among-us-real-life/src/views/admin.html`
 
 Notes:
-- Static assets are served from `/src/public/...` and the site includes a root `index.html` that redirects into the `src/views` folder.
-- When running locally without Pages, leave `window.BACKEND_URL` undefined to use same-origin (`http://localhost:4046`).
-
-## Known issues
+- Static assets are served from `/src/public/...` 
+- The root `index.html` redirects to `src/views/index.html`
+- Render's free tier may sleep after 15 minutes of inactivity (first request takes ~30s to wake up)
+- When running locally, the config auto-detects and uses `http://localhost:4046`## Known issues
 
 -   Sometimes, duplicate tasks are assigned (temporary workaround is to start another game)
 -   On some Android phones, hiding the browser will reset its state, therefore losing your tasks

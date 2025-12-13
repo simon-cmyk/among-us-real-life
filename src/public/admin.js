@@ -4,7 +4,19 @@ const socket = io(window.BACKEND_URL || undefined, {
 	}
 });
 
-const startGame$ = document.querySelector('#start-game');
+// Connection diagnostics
+console.log('Connecting to backend (admin):', window.BACKEND_URL || window.location.origin);
+socket.on('connect', () => {
+	console.log('Admin socket connected', socket.id);
+});
+socket.on('connect_error', (err) => {
+	console.error('Admin connect_error', err);
+});
+socket.on('error', (err) => {
+	console.error('Admin socket error', err);
+});
+
+const startGame$ = document.querySelector('#start-game-button');
 
 startGame$.addEventListener('click', () => {
 	socket.emit('start-game');
@@ -38,4 +50,9 @@ socket.on('play-meeting', async () => {
 
 socket.on('play-win', async () => {
 	await SOUNDS.youWin.play();
+});
+
+socket.on('progress', progress => {
+	const progressText = document.querySelector('#progress-text');
+	progressText.textContent = `Progress is ${Math.round(progress * 100)}% complete`;
 });

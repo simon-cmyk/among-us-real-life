@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-
-		<title>Aong Us</title>
-
-		<link rel="stylesheet" href="/src/public/admin.css" />
-	</head>
-	<body>
-		<h1>Admin</h1>
-
-		<button id="start-game">Start Game</button>
-
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js" integrity="sha512-eVL5Lb9al9FzgR63gDs1MxcDS2wFu3loYAgjIH0+Hg38tCS8Ag62dwKyH+wzDb+QauDpEZjXbMn11blw8cbTJQ==" crossorigin="anonymous"></script>
-		<script src="/src/public/config.js"></script>
-		<script src="/src/public/admin.js"></script>
-	</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Among Us - Admin</title>
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        />
+        <link rel="stylesheet" href="/src/public/styles.css" />
+    </head>
+    <body>
+        <div class="container-fluid h-100">
+            <h1 class="text-center my-4">Among Us - Admin Panel</h1>
+            <div class="row justify-content-center my-4">
+                <div class="col-auto">
+                    <button id="start-game-button" class="btn btn-success btn-lg">
+                        Start Game
+                    </button>
+                </div>
+            </div>
+            <div id="progress-container" class="text-center my-4">
+                <p id="progress-text">Progress is 0% complete</p>
+            </div>
+        </div>
+        <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+        <script src="/src/public/config.js"></script>
+        <script src="/src/public/admin.js"></script>
+    </body>
 </html>
