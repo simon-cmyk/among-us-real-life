@@ -16,13 +16,13 @@
             
             <div class="row justify-content-center my-2">
                 <div class="col-auto">
-                    <p class="text-muted">Active Players: <strong id="active-players">0</strong></p>
+                    <p style="color: #fff; font-size: 1.3rem; font-weight: bold;">Active Players: <strong id="active-players">0</strong></p>
                 </div>
             </div>
             
             <div class="row justify-content-center my-4">
                 <div class="col-auto">
-                    <label for="impostor-count">Number of Impostors:</label>
+                    <label for="impostor-count" style="color: #fff; font-size: 1.1rem; font-weight: bold;">Number of Impostors:</label>
                     <input 
                         type="number" 
                         id="impostor-count" 
@@ -42,15 +42,18 @@
                     </button>
                 </div>
             </div>
-            <div id="progress-container" class="text-center my-4">
-                <p id="progress-text">Progress is 0% complete</p>
+            <div id="progress-container">
+                <p id="progress-text">🎅 Progress: 0% complete</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
             </div>
 
             <div class="row justify-content-center my-4">
                 <div class="col-md-8">
-                    <h3 class="text-center">Task Status</h3>
+                    <h3 class="text-center" style="color: #fff; font-size: 1.5rem; font-weight: bold;">Task Status</h3>
                     <div id="tasks-status" style="max-height: 400px; overflow-y: auto;">
-                        <p class="text-muted text-center">No game running</p>
+                        <p style="color: #fff; font-size: 1.1rem; text-align: center;">No game running</p>
                     </div>
                 </div>
             </div>
@@ -58,5 +61,6 @@
         <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
         <script src="../public/config.js?v=5"></script>
         <script src="../public/admin.js?v=5"></script>
+        <link rel="icon" type="image/png" href="/src/public/images/among_us_christmas.png">
     </body>
 </html>

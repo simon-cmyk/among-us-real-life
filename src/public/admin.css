@@ -1,3 +1,55 @@
 h1 {
-	font-family: 'Comic Sans MS';
+	font-family: 'Arial', sans-serif;
+	color: #fff;
+	text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3), 
+	             -2px -2px 0px rgba(255, 215, 0, 0.5);
+	font-weight: 700;
+	letter-spacing: 1px;
+}
+
+#progress-container {
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 1rem;
+	padding: 1.5rem;
+	margin: 1rem auto !important;
+	max-width: 95%;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border: 3px solid #c41e3a;
+}
+
+#progress-text {
+	font-size: 1.3rem;
+	color: #165b33;
+	font-weight: bold;
+	margin: 0;
+}
+
+.progress {
+	height: 30px;
+	border-radius: 1rem;
+	background-color: #ddd;
+	margin-top: 1rem;
+	overflow: hidden;
+	border: 2px solid #165b33;
+}
+
+.progress-bar {
+	background: linear-gradient(90deg, #00c853, #33dd00);
+	transition: width 0.3s ease;
+	font-weight: bold;
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+
+#tasks-status {
+	color: #fff;
+}
+
+#tasks-status p, #tasks-status li {
+	color: #fff !important;
+	font-size: 1.1rem;
 }
