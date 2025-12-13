@@ -1,4 +1,4 @@
-const socket = io({
+const socket = io(window.BACKEND_URL || undefined, {
 	query: {
 		role: 'PLAYER'
 	}
