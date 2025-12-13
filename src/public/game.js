@@ -125,17 +125,15 @@ async function wait(milliseconds) {
 }
 
 const SOUNDS = {
-    meeting: new Audio('/src/public/sounds/meeting.mp3'),
-    sabotage: new Audio('/src/public/sounds/sabotage.mp3'),
-    start: new Audio('/src/public/sounds/start.mp3'),
-    sussyBoy: new Audio('/src/public/sounds/sussy-boy.mp3'),
-    taskComplete: new Audio('/src/public/sounds/task-complete.mp3'),
-    voteResult: new Audio('/src/public/sounds/vote-result.mp3'),
-    youLose: new Audio('/src/public/sounds/you-lose.mp3'),
-    youWin: new Audio('/src/public/sounds/you-win.mp3')
-};
-
-socket.on('play-meeting', async () => {
+	meeting: new Audio('../sounds/meeting.mp3'),
+	sabotage: new Audio('../sounds/sabotage.mp3'),
+	start: new Audio('../sounds/start.mp3'),
+	sussyBoy: new Audio('../sounds/sussy-boy.mp3'),
+	taskComplete: new Audio('../sounds/task-complete.mp3'),
+	voteResult: new Audio('../sounds/vote-result.mp3'),
+	youLose: new Audio('../sounds/you-lose.mp3'),
+	youWin: new Audio('../sounds/you-win.mp3')
+};socket.on('play-meeting', async () => {
     console.log('Playing meeting sound, soundEnabled:', soundEnabled);
     if (!soundEnabled) {
         console.log('Sound is disabled - click "Enable Sound" button first');
