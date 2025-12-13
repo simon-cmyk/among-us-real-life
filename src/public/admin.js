@@ -17,9 +17,64 @@ socket.on('error', (err) => {
 });
 
 const startGame$ = document.querySelector('#start-game-button');
+const impostorCount$ = document.querySelector('#impostor-count');
+const activePlayers$ = document.querySelector('#active-players');
+const tasksStatus$ = document.querySelector('#tasks-status');
 
 startGame$.addEventListener('click', () => {
-	socket.emit('start-game');
+	const numImpostors = parseInt(impostorCount$.value) || 1;
+	console.log('Start game clicked - impostorCount$.value:', impostorCount$.value, 'numImpostors:', numImpostors);
+	socket.emit('start-game', { numImpostors });
+});
+
+// Listen for player count updates
+socket.on('player-count', (count) => {
+	console.log('Active players:', count);
+	activePlayers$.textContent = count;
+});
+
+// Listen for task data from backend
+socket.on('game-tasks', (allPlayerTasks) => {
+	const taskList = [];
+	Object.values(allPlayerTasks).forEach(playerTasks => {
+		Object.entries(playerTasks).forEach(([taskId, taskName]) => {
+			taskList.push({ id: taskId, name: taskName });
+		});
+	});
+
+	if (taskList.length === 0) {
+		tasksStatus$.innerHTML = '<p class="text-muted text-center">No game running</p>';
+		return;
+	}
+
+	const taskHtml = taskList.map(task => 
+		`<div class="list-group-item" data-task-id="${task.id}">${task.name}</div>`
+	).join('');
+	tasksStatus$.innerHTML = `<div class="list-group">${taskHtml}</div>`;
+});
+
+// Listen for task completion updates
+socket.on('task-completed', (taskId) => {
+	const taskItem = document.querySelector(`[data-task-id="${taskId}"]`);
+	if (taskItem) {
+		taskItem.style.textDecoration = 'line-through';
+		taskItem.style.opacity = '0.5';
+		taskItem.style.backgroundColor = '#d4edda';
+	}
+});
+
+socket.on('task-incomplete', (taskId) => {
+	const taskItem = document.querySelector(`[data-task-id="${taskId}"]`);
+	if (taskItem) {
+		taskItem.style.textDecoration = 'none';
+		taskItem.style.opacity = '1';
+		taskItem.style.backgroundColor = 'transparent';
+	}
+});
+
+// Request initial player count on connect
+socket.on('connect', () => {
+	socket.emit('get-player-count');
 });
 
 /**

@@ -13,6 +13,28 @@
     <body>
         <div class="container-fluid h-100">
             <h1 class="text-center my-4">Among Us - Admin Panel</h1>
+            
+            <div class="row justify-content-center my-2">
+                <div class="col-auto">
+                    <p class="text-muted">Active Players: <strong id="active-players">0</strong></p>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center my-4">
+                <div class="col-auto">
+                    <label for="impostor-count">Number of Impostors:</label>
+                    <input 
+                        type="number" 
+                        id="impostor-count" 
+                        min="1" 
+                        max="10" 
+                        value="1" 
+                        class="form-control"
+                        style="width: 80px;"
+                    />
+                </div>
+            </div>
+            
             <div class="row justify-content-center my-4">
                 <div class="col-auto">
                     <button id="start-game-button" class="btn btn-success btn-lg">
@@ -22,6 +44,15 @@
             </div>
             <div id="progress-container" class="text-center my-4">
                 <p id="progress-text">Progress is 0% complete</p>
+            </div>
+
+            <div class="row justify-content-center my-4">
+                <div class="col-md-8">
+                    <h3 class="text-center">Task Status</h3>
+                    <div id="tasks-status" style="max-height: 400px; overflow-y: auto;">
+                        <p class="text-muted text-center">No game running</p>
+                    </div>
+                </div>
             </div>
         </div>
         <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
