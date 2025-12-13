@@ -87,13 +87,13 @@ async function wait(milliseconds) {
 
 const soundPlayer = new Audio();
 const SOUNDS = {
-	meeting: '/sounds/meeting.mp3',
-	sabotage: '/sounds/sabotage.mp3',
-	start: '/sounds/start.mp3',
-	sussyBoy: '/sounds/sussy-boy.mp3',
-	voteResult: '/sounds/vote-result.mp3',
-	youLose: '/sounds/you-lose.mp3',
-	youWin: '/sounds/you-win.mp3'
+	meeting: '/src/public/sounds/meeting.mp3',
+	sabotage: '/src/public/sounds/sabotage.mp3',
+	start: '/src/public/sounds/start.mp3',
+	sussyBoy: '/src/public/sounds/sussy-boy.mp3',
+	voteResult: '/src/public/sounds/vote-result.mp3',
+	youLose: '/src/public/sounds/you-lose.mp3',
+	youWin: '/src/public/sounds/you-win.mp3'
 };
 
 socket.on('play-meeting', async () => {
