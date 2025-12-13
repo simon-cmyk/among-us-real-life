@@ -6,6 +6,7 @@ const enableSound$ = document.querySelector('#enable-sound');
 const progressText$ = document.querySelector('#progress-text');
 const reportButton$ = document.querySelector('#report-button');
 const tasksList$ = document.querySelector('#tasks-list');
+const actionNotification$ = document.querySelector('#action-notification');
 
 let soundEnabled = false;
 let currentTasks = {}; // Store tasks in memory
@@ -50,6 +51,26 @@ function saveTasks() {
 // Save completed tasks to localStorage
 function saveCompletedTasks() {
     localStorage.setItem('completedTasks', JSON.stringify(Array.from(completedTaskIds)));
+}
+
+// Show action notification
+function showActionNotification(message) {
+    console.log('showActionNotification called with:', message);
+    const notif = document.querySelector('#action-notification');
+    console.log('Notification element found:', notif !== null);
+    if (notif) {
+        notif.textContent = message;
+        notif.style.display = 'block';
+        console.log('Notification displayed with message:', message);
+        setTimeout(() => {
+            notif.style.display = 'none';
+            console.log('Notification hidden');
+        }, 3000);
+    } else {
+        console.error('Could not find action-notification element');
+        // Fallback: create a simple alert
+        alert(message);
+    }
 }
 
 // Render tasks on the page
@@ -272,6 +293,11 @@ const SOUNDS = {
     } catch (err) {
         console.error('Error playing meeting sound:', err);
     }
+});
+
+socket.on('action-notification', (message) => {
+    console.log('Received action-notification event:', message);
+    showActionNotification(message);
 });
 
 socket.on('play-task-complete', async () => {

@@ -16,6 +16,11 @@
                 Cannot connect to backend. Check console for details.
             </div>
 
+            <!-- Action Notification Modal -->
+            <div id="action-notification" class="alert alert-info" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; padding: 2rem; border-radius: 1rem; background: rgba(0, 150, 200, 0.95); color: white; font-size: 1.5rem; font-weight: bold; text-align: center; min-width: 300px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);">
+                <!-- Notification message goes here -->
+            </div>
+
             <!-- Logo -->
             <div class="logo-container">
                 <img src="../public/images/among_us_christmas.png" alt="Among Us Christmas Logo" />
@@ -50,7 +55,7 @@
             </div>
 
             <div id="tasks-container">
-                <h2>📝 Tasks</h2>
+                <h2 style="color: black;">📝 Tasks</h2>
                 <ul id="tasks-list" class="list-group"></ul>
             </div>
         </div>

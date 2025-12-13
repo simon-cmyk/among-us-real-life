@@ -189,6 +189,7 @@ io.on('connection', socket => {
         if (progress >= 1) {
             console.log('All tasks completed! Crewmates win!');
             io.emit('play-win');
+            io.emit('action-notification', '🎉 All tasks completed! Crewmates win!');
         }
     });
 
@@ -205,11 +206,13 @@ io.on('connection', socket => {
     socket.on('emergency-meeting', () => {
         console.log('Emergency meeting called');
         io.emit('play-meeting');
+        io.emit('action-notification', '⚠️ Emergency meeting called!');
     });
 
     socket.on('report', () => {
         console.log('Body reported');
         io.emit('play-meeting');
+        io.emit('action-notification', '🚨 Body reported!');
     });
 
     socket.on('disconnect', () => {
