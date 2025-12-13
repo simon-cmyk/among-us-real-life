@@ -4,8 +4,8 @@
 
 // Automatically detect environment
 if (window.location.hostname === 'simon-cmyk.github.io') {
-  // Production: GitHub Pages - SET YOUR DEPLOYED BACKEND URL HERE
-  window.BACKEND_URL = "https://YOUR-BACKEND-URL.onrender.com";
+  // Production: GitHub Pages - Railway backend
+  window.BACKEND_URL = "https://among-us-backend-production.up.railway.app";
 } else {
   // Local development
   window.BACKEND_URL = "http://localhost:4046";
