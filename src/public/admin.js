@@ -32,14 +32,19 @@ async function wait(milliseconds) {
 	});
 }
 
+// Determine base path for assets
+const BASE_PATH = window.location.hostname === 'simon-cmyk.github.io' 
+	? '/among-us-real-life/src/public/' 
+	: '/src/public/';
+
 const SOUNDS = {
-	meeting: new Audio('sounds/meeting.mp3'),
-	sabotage: new Audio('sounds/sabotage.mp3'),
-	start: new Audio('sounds/start.mp3'),
-	sussyBoy: new Audio('sounds/sussy-boy.mp3'),
-	voteResult: new Audio('sounds/vote-result.mp3'),
-	youLose: new Audio('sounds/you-lose.mp3'),
-	youWin: new Audio('sounds/you-win.mp3')
+	meeting: new Audio(BASE_PATH + 'sounds/meeting.mp3'),
+	sabotage: new Audio(BASE_PATH + 'sounds/sabotage.mp3'),
+	start: new Audio(BASE_PATH + 'sounds/start.mp3'),
+	sussyBoy: new Audio(BASE_PATH + 'sounds/sussy-boy.mp3'),
+	voteResult: new Audio(BASE_PATH + 'sounds/vote-result.mp3'),
+	youLose: new Audio(BASE_PATH + 'sounds/you-lose.mp3'),
+	youWin: new Audio(BASE_PATH + 'sounds/you-win.mp3')
 };
 
 socket.on('play-meeting', async () => {
