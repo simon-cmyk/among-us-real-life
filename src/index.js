@@ -40,11 +40,13 @@ app.get('/admin', (req, res) => {
 
 const TASK_LIST = [
 'Rebuild the brick tower with 21 bricks (heater room)',
+'Bring a christmas tree bauble to Silas bed (storage room attic)',
 'Wash your hands (bathroom downstairs)',
 	'Wash your hands (bathroom attic)',
 	'Wash your hands (kitchen)',
 	'Wash your hands (laundry room)',
-	'Wash your hands (tap outside)',
+	'Throw six darts arrow outside',
+	'Bring the fake four lights to the window sill (Silas's room)'
 	'Free throw "throw the basketball in the basket" (living room)',
 	'Bordbasketbal - score one basket (hallway attic)',
 	'Roll the D20 "get the dragon eye" (Silas room)',
@@ -61,7 +63,7 @@ const TASK_LIST = [
 	'Vacuum at the entrance (entrance)',
 	'Open/close window (bathroom attic)',
 	'Exhange toiletpaper betweeen the bathrooms (bathroom attic/downsatirs)',
-	'Bring a christmas tree bauble to Silas bed (storage room attic)',
+	
 	'Move the fire extinguisher from one side of the room to the other (hallway attic)',
 	'Clean the window (kitchen)',
 	'Draw a cat on the fridge (kitchen)',

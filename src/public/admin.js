@@ -18,13 +18,15 @@ socket.on('error', (err) => {
 
 const startGame$ = document.querySelector('#start-game-button');
 const impostorCount$ = document.querySelector('#impostor-count');
+const taskCount$ = document.querySelector('#task-count');
 const activePlayers$ = document.querySelector('#active-players');
 const tasksStatus$ = document.querySelector('#tasks-status');
 
 startGame$.addEventListener('click', () => {
 	const numImpostors = parseInt(impostorCount$.value) || 1;
-	console.log('Start game clicked - impostorCount$.value:', impostorCount$.value, 'numImpostors:', numImpostors);
-	socket.emit('start-game', { numImpostors });
+	const tasksPerCrewmate = parseInt(taskCount$.value) || 5;
+	console.log('Start game clicked - impostorCount$.value:', impostorCount$.value, 'numImpostors:', numImpostors, 'tasksPerCrewmate:', tasksPerCrewmate);
+	socket.emit('start-game', { numImpostors, tasksPerCrewmate });
 });
 
 // Listen for player count updates
