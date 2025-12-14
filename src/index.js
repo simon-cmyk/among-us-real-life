@@ -46,7 +46,7 @@ const TASK_LIST = [
 	'Wash your hands (kitchen)',
 	'Wash your hands (laundry room)',
 	'Throw six darts arrow outside',
-	'Bring the fake four lights to the window sill (Silas's room)'
+	'Bring the fake four lights to the window sill (Silas room)',
 	'Free throw "throw the basketball in the basket" (living room)',
 	'Bordbasketbal - score one basket (hallway attic)',
 	'Roll the D20 "get the dragon eye" (Silas room)',
@@ -157,15 +157,25 @@ io.on('connection', socket => {
 			const role = impostorIds.has(playerSocket.id) ? 'Impostor' : 'Crewmate';
 			game.roles[playerSocket.id] = role;
 			playerSocket.emit('role', role);
-		});        // Assign 5 random tasks to each CREWMATE (not impostor)
+		});
+		
+		// Get number of tasks per crewmate from options, default to 5
+		let tasksPerCrewmate = parseInt(options?.tasksPerCrewmate) || 5;
+		// Cap at available task count
+		const maxTasks = TASK_LIST.length;
+		tasksPerCrewmate = Math.min(tasksPerCrewmate, maxTasks);
+		
+		console.log(`Assigning ${tasksPerCrewmate} tasks per crewmate`);
+		
+        // Assign random tasks to each CREWMATE (not impostor)
         sockets.forEach(playerSocket => {
             if (game.roles[playerSocket.id] === 'Impostor') {
                 // Impostor gets NO tasks - send empty object
                 playerSocket.emit('tasks', {});
                 console.log('Impostor gets no tasks');
             } else {
-                // Crewmate gets 5 tasks
-                const playerTaskList = _.sampleSize(TASK_LIST, 5);
+                // Crewmate gets configured number of tasks
+                const playerTaskList = _.sampleSize(TASK_LIST, tasksPerCrewmate);
                 const playerTasksObj = {};
                 
                 playerTaskList.forEach(taskName => {
